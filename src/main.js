@@ -14,6 +14,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 function showSkiResorts() {
     skiResorts.forEach(resort => {
         const marker = L.marker([resort.lat, resort.lon]).addTo(map)
+        .bindPopup(`<b>${resort.name}</b>`);
     });
 }
 
