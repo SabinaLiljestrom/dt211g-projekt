@@ -3,14 +3,19 @@
   "version": "1.0.0",
   "description": "Uppgiften är en del av kursen Frontend-baserad webbutveckling",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Sabina Liljeström",
   "license": "ISC",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html"
+  },
   "dependencies": {
     "leaflet": "^1.9.4",
     "parcel": "^2.12.0",
     "sass": "^1.77.6"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.12.0"
   }
 }
