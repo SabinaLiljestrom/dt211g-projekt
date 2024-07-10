@@ -43,8 +43,9 @@ async function showWeather(resortName, lat, lon, marker) {
         const weatherData = JSON.parse(weatherText); // Försök att parsa texten till JSON
 
         const temperature = weatherData.timeSeries[0].parameters.find(param => param.name === 't').values[0];
-
-        const popupContent = `<b>${resortName}</b><br>Temperatur: ${temperature}°C`;
+        const wind = weatherData.timeSeries[0].parameters.find(param => param.name === 'ws').values[0];
+        const gust = weatherData.timeSeries[0].parameters.find(param => param.name === 'gust').values[0];
+        const popupContent = `<b>${resortName}</b><br>Temperatur: ${temperature}°C<br>Vind: ${wind} (${gust}) m/s (byvind)`;
         marker.getPopup().setContent(popupContent).update();
     } catch (error) {
         console.error('Error fetching data:', error);
