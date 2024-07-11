@@ -1,8 +1,8 @@
 [
     { "name": "Åre", "lat": 63.398, "lon": 13.083 },
     { "name": "Sälen", "lat": 61.158, "lon": 13.120 },
-    { "name": "Trillevallen", "lat": 63.30278, "lon": 13.16633 },
-    { "name": "Funäsdalsberget", "lat": 62.6018, "lon": 12.54153 }, 
+    { "name": "Trillevalen", "lat": 63.30278, "lon": 13.16633 },
+    { "name": "Funäsdalen", "lat": 62.53, "lon": 12.55 }, 
     { "name": "Idre FJäll", "lat": 61.9540, "lon": 12.83470 },
     { "name": "Vemdalen", "lat": 62.44627, "lon": 13.96692 }, 
     { "name": "Kläppen", "lat": 61.06847, "lon": 13.318635 }, 
@@ -14,5 +14,21 @@
     { "name": "Källviksbacken", "lat": 60.63566, "lon": 15.62979}, 
     { "name": "Ramundberget", "lat": 62.70238, "lon": 12.387245 },
     { "name": "Kittlefjäll", "lat": 65.25470, "lon": 15.488352 }, 
-    { "name": "Borgafjäll", "lat": 64.8366, "lon": 15.0838 } 
+    { "name": "Bjursås", "lat": 60.73, "lon": 15.43 },
+    { "name": "Björkliden", "lat": 68.40, "lon": 18.68 }, 
+    { "name": "Björnrike", "lat": 62.42, "lon":  13.95 },
+    { "name": "Branas", "lat": 60.65, "lon": 12.95}, 
+    { "name": "Kiruna", "lat": 67.83, "lon": 20.20 },
+    { "name": "Klövsjö", "lat": 62.50, "lon": 14.15 }, 
+    { "name": "Kungsberget", "lat": 60.75, "lon": 16.48 } ,
+    { "name": "Lofsdalen", "lat": 62.12, "lon": 13.27 },
+    { "name": "Romme Alpin", "lat": 60.43, "lon": 15.50 }, 
+    { "name": "Säfsen", "lat": 60.13, "lon": 14.42 },
+    { "name": "Storlien", "lat": 63.58, "lon": 12.88 }, 
+    { "name": "Stöten", "lat": 61.27, "lon":  13.95 },
+    { "name": "Tärnaby", "lat": 65.72, "lon": 15.34}, 
+    { "name": "Tolvmannabacken", "lat": 57.97, "lon": 15.62 },
+    { "name": "Klövsjö", "lat": 62.50, "lon": 14.15 }, 
+    { "name": "Valåsen", "lat": 56.39, "lon": 13.11 },
+    { "name": "Perisher Snow Forecast", "lat": 36.40, "lon": 148.41 } 
 ]
