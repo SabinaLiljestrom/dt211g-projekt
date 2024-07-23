@@ -1,4 +1,4 @@
-#map {
-    height: 100vh;
-    width: 100%;
-}
+@import 'abstract/variables';
+@import 'layout/header';
+@import 'layout/map.scss';
+@import 'layout/animation.scss';

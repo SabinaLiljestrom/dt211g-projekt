@@ -29,6 +29,5 @@
     { "name": "Tärnaby", "lat": 65.72, "lon": 15.34}, 
     { "name": "Tolvmannabacken", "lat": 57.97, "lon": 15.62 },
     { "name": "Klövsjö", "lat": 62.50, "lon": 14.15 }, 
-    { "name": "Valåsen", "lat": 56.39, "lon": 13.11 },
-    { "name": "Perisher Snow Forecast", "lat": 36.40, "lon": 148.41 } 
+    { "name": "Valåsen", "lat": 56.39, "lon": 13.11 }
 ]

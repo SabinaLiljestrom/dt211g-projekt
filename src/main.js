@@ -24,7 +24,7 @@ function showSkiResorts() {
     skiResorts.forEach(resort => {
         const marker = L.marker([resort.lat, resort.lon], { icon: skiIcon }).addTo(map)
             .bindPopup(`<b>${resort.name}</b><br>Hämtar väder...`, { closeOnClick: false, autoClose: false });
-
+        
         marker.on('click', () => {
             showWeather(resort.name, resort.lat, resort.lon, marker);
         });
