@@ -19,9 +19,44 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
+// Lägg till OpenSnowMap overlay layer för att visa skidområden
+L.tileLayer('https://tiles.opensnowmap.org/pistes/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenSnowMap.org'
+}).addTo(map);
+
+// Funktion för att hämta skidorter från OpenStreetMap via Overpass API
+async function fetchSkiResortsFromOverpass() {
+    const overpassUrl = `
+        https://overpass-api.de/api/interpreter?data=[out:json];
+        area["ISO3166-1"="SE"][admin_level=2];
+        node["piste:type"~"downhill|backcountry"](area);
+        out body;
+    `;
+
+    try {
+        const response = await fetch(overpassUrl);
+        const data = await response.json();
+        return data.elements.map(resort => ({
+            name: resort.tags.name || 'Okänd skidort',
+            lat: parseFloat(resort.lat.toFixed(5)), // Avrunda latitud till 5 decimaler
+            lon: parseFloat(resort.lon.toFixed(5)), // Avrunda longitud till 5 decimaler
+            elevation: resort.tags.ele ? parseInt(resort.tags.ele, 10) : 0
+        }));
+    } catch (error) {
+        console.error('Error fetching ski resorts:', error);
+        return [];
+    }
+}
+
 // Funktion för att visa skidorter
-function showSkiResorts() {
-    skiResorts.forEach(resort => {
+async function showSkiResorts() {
+    const overpassResorts = await fetchSkiResortsFromOverpass();
+    const combinedResorts = [
+        ...skiResorts,
+        ...overpassResorts
+    ];
+
+    combinedResorts.forEach(resort => {
         const marker = L.marker([resort.lat, resort.lon], { icon: skiIcon }).addTo(map)
             .bindPopup(`<b>${resort.name}</b><br>Hämtar väder...`, { closeOnClick: false, autoClose: false });
         
@@ -40,6 +75,7 @@ async function showWeather(resortName, lat, lon, marker) {
         const smhiApiUrl = `https://opendata-download-metfcst.smhi.se/api/category/${category}/version/${version}/geotype/point/lon/${lon}/lat/${lat}/data.json`;
 
         const smhiResponse = await fetch(proxyUrl + smhiApiUrl);
+        if (!smhiResponse.ok) throw new Error(`SMHI API error: ${smhiResponse.statusText}`);
         const smhiText = await smhiResponse.text();
         const smhiData = JSON.parse(smhiText);
 
@@ -57,10 +93,9 @@ async function showWeather(resortName, lat, lon, marker) {
         };
 
         const rapidApiResponse = await fetch(proxyUrl + rapidApiUrl, rapidApiOptions);
+        if (!rapidApiResponse.ok) throw new Error(`RapidAPI error: ${rapidApiResponse.statusText}`);
         const rapidApiText = await rapidApiResponse.text();
-        console.log('RapidAPI raw response:', rapidApiText); // Logga den råa texten för felsökning
         const rapidApiData = JSON.parse(rapidApiText);
-        console.log('RapidAPI parsed response:', rapidApiData); // Logga det parsade JSON-objektet för felsökning
 
         // Kontrollera att den mottagna datan har förväntad struktur
         const topSnowDepth = rapidApiData.topSnowDepth ?? 'saknas information just nu.';
