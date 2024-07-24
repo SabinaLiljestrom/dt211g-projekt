@@ -1,0 +1,25 @@
+
+
+/* Definiera animationen för glow-effekt */
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 20px $primaryGlow;
+    }
+    50% {
+        box-shadow: 0 0 50px $primaryGlow2;
+    }
+    100% {
+        box-shadow: 0 0 5px $primaryHeading;
+    }
+}
+
+/* Klass för att applicera glow-effekt på ikonen */
+.glow-icon {
+    position: relative; 
+    transition: all 0.3s ease;
+}
+
+/* Klass som appliceras vid hover */
+.glow-icon:hover {
+    animation: glow 5.5s infinite;
+}

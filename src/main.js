@@ -19,7 +19,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-// Lägg till OpenSnowMap overlay layer för att visa skidområden
+// Lägg till OpenSnowMap overlay layer för att visa skidområden på kartan
 L.tileLayer('https://tiles.opensnowmap.org/pistes/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenSnowMap.org'
 }).addTo(map);
@@ -38,8 +38,8 @@ async function fetchSkiResortsFromOverpass() {
         const data = await response.json();
         return data.elements.map(resort => ({
             name: resort.tags.name || 'Okänd skidort',
-            lat: parseFloat(resort.lat.toFixed(5)), // Avrunda latitud till 5 decimaler
-            lon: parseFloat(resort.lon.toFixed(5)), // Avrunda longitud till 5 decimaler
+            lat: parseFloat(resort.lat.toFixed(5)), // Avrunda latitud till 5 decimaler för att matcha andra API
+            lon: parseFloat(resort.lon.toFixed(5)), // Avrunda longitud till 5 decimaler för att matcha andra API
             elevation: resort.tags.ele ? parseInt(resort.tags.ele, 10) : 0
         }));
     } catch (error) {
@@ -59,7 +59,15 @@ async function showSkiResorts() {
     combinedResorts.forEach(resort => {
         const marker = L.marker([resort.lat, resort.lon], { icon: skiIcon }).addTo(map)
             .bindPopup(`<b>${resort.name}</b><br>Hämtar väder...`, { closeOnClick: false, autoClose: false });
-        
+            // Lägg till 'glow-icon' klass när musen är över
+        marker.on('mouseover', function () {
+            this._icon.classList.add('glow-icon');
+        });
+
+        // Ta bort 'glow-icon' klass när musen inte är över
+        marker.on('mouseout', function () {
+            this._icon.classList.remove('glow-icon');
+        });
         marker.on('click', () => {
             showWeather(resort.name, resort.lat, resort.lon, marker);
         });
