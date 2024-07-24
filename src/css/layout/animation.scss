@@ -16,10 +16,27 @@
 /* Klass för att applicera glow-effekt på ikonen */
 .glow-icon {
     position: relative; 
-    transition: all 0.3s ease;
+    transition: all 0.1s ease;
 }
 
 /* Klass som appliceras vid hover */
 .glow-icon:hover {
-    animation: glow 5.5s infinite;
+    animation: glow 2.5s infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Spinner-stil */
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid $primaryHeading; 
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 8px; /* Avstånd mellan spinner och text */
 }

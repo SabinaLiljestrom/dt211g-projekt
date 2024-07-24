@@ -58,7 +58,7 @@ async function showSkiResorts() {
 
     combinedResorts.forEach(resort => {
         const marker = L.marker([resort.lat, resort.lon], { icon: skiIcon }).addTo(map)
-            .bindPopup(`<b>${resort.name}</b><br>Hämtar väder...`, { closeOnClick: false, autoClose: false });
+            .bindPopup(`<b>${resort.name}</b><br><div class="spinner"></div><br>Hämtar väder...`, { closeOnClick: false, autoClose: false });
             // Lägg till 'glow-icon' klass när musen är över
         marker.on('mouseover', function () {
             this._icon.classList.add('glow-icon');
