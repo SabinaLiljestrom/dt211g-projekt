@@ -95,13 +95,11 @@ function showWeather(resortName, lat, lon, marker) {
     const smhiRequest = new XMLHttpRequest();
     smhiRequest.open('GET', smhiApiUrl, true);
     smhiRequest.onload = function() {
-        console.log('SMHI response:', smhiRequest.responseText); // Logga svar
+       
 
         if (smhiRequest.status >= 200 && smhiRequest.status < 400) {
             try {
                 const smhiData = JSON.parse(smhiRequest.responseText);
-                // Logga  parsed JSON data
-                console.log('Parsed SMHI data:', smhiData);
 
                 const temperature = smhiData.timeSeries[0].parameters.find(param => param.name === 't').values[0];
                 const wind = smhiData.timeSeries[0].parameters.find(param => param.name === 'ws').values[0];
@@ -119,13 +117,10 @@ function showWeather(resortName, lat, lon, marker) {
                     rapidRequest.setRequestHeader(key, rapidApiOptions[key]);
                 }
                 rapidRequest.onload = function() {
-                    console.log('RapidAPI response:', rapidRequest.responseText); // Log the response
-
+                    
                     if (rapidRequest.status >= 200 && rapidRequest.status < 400) {
                         try {
                             const rapidApiData = JSON.parse(rapidRequest.responseText);
-                            // Logga parsed JSON data
-                            console.log('Parsed RapidAPI data:', rapidApiData);
 
                             const topSnowDepth = rapidApiData.topSnowDepth ?? 'saknas information just nu.';
                             const botSnowDepth = rapidApiData.botSnowDepth ?? 'saknas information just nu.';
