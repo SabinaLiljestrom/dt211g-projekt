@@ -2,7 +2,7 @@
   "name": "dt211g-projekt",
   "version": "1.0.0",
   "description": "Uppgiften är en del av kursen Frontend-baserad webbutveckling",
-  "main": "index.js",
+  "main": "index.html",
   "author": "Sabina Liljeström",
   "license": "ISC",
   "scripts": {
