@@ -88,13 +88,11 @@ function showSkiResorts() {
 
 // Funktion för att hämta och visa väderprognos och snöförhållanden
 function showWeather(resortName, lat, lon, marker) {
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    const category = 'pmp3g';
-    const version = '2';
-    const smhiApiUrl = `https://opendata-download-metfcst.smhi.se/api/category/${category}/version/${version}/geotype/point/lon/${lon}/lat/${lat}/data.json`;
+    const smhiApiUrl = `/api/fetchWeather?lat=${lat}&lon=${lon}`;
+    const rapidApiUrl = `/api/fetchSnowConditions?resortName=${resortName.toLowerCase()}`;
 
     const smhiRequest = new XMLHttpRequest();
-    smhiRequest.open('GET', proxyUrl + smhiApiUrl, true);
+    smhiRequest.open('GET', smhiApiUrl, true);
     smhiRequest.onload = function() {
         if (smhiRequest.status >= 200 && smhiRequest.status < 400) {
             const smhiData = JSON.parse(smhiRequest.responseText);
@@ -102,17 +100,8 @@ function showWeather(resortName, lat, lon, marker) {
             const wind = smhiData.timeSeries[0].parameters.find(param => param.name === 'ws').values[0];
             const gust = smhiData.timeSeries[0].parameters.find(param => param.name === 'gust').values[0];
 
-            const rapidApiUrl = `https://ski-resort-forecast.p.rapidapi.com/${resortName.toLowerCase()}/snowConditions?units=m`;
-            const rapidApiOptions = {
-                'x-rapidapi-key': '5c48411b97msh43df63e7cfa00d6p11922bjsnaa3ea7a3a7f8',
-                'x-rapidapi-host': 'ski-resort-forecast.p.rapidapi.com'
-            };
-
             const rapidRequest = new XMLHttpRequest();
-            rapidRequest.open('GET', proxyUrl + rapidApiUrl, true);
-            for (const key in rapidApiOptions) {
-                rapidRequest.setRequestHeader(key, rapidApiOptions[key]);
-            }
+            rapidRequest.open('GET', rapidApiUrl, true);
             rapidRequest.onload = function() {
                 if (rapidRequest.status >= 200 && rapidRequest.status < 400) {
                     const rapidApiData = JSON.parse(rapidRequest.responseText);
