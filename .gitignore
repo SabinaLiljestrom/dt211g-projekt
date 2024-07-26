@@ -2,3 +2,6 @@ node_modules/
 dist/
 .parcel-cache/
 .DS-Store/
+
+# Local Netlify folder
+.netlify
