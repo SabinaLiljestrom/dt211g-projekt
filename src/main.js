@@ -88,46 +88,71 @@ function showSkiResorts() {
 
 // Funktion för att hämta och visa väderprognos och snöförhållanden
 function showWeather(resortName, lat, lon, marker) {
-    const smhiApiUrl = `fub/api/fetchWeather?lat=${lat}&lon=${lon}`;
-    const rapidApiUrl = `/api/fetchSnowConditions?resortName=${resortName.toLowerCase()}`;
+    const smhiApiUrl = `https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/${lon}/lat/${lat}/data.json`;
+
+    console.log('Requesting SMHI data from:', smhiApiUrl);
 
     const smhiRequest = new XMLHttpRequest();
     smhiRequest.open('GET', smhiApiUrl, true);
     smhiRequest.onload = function() {
+       
+
         if (smhiRequest.status >= 200 && smhiRequest.status < 400) {
-            const smhiData = JSON.parse(smhiRequest.responseText);
-            const temperature = smhiData.timeSeries[0].parameters.find(param => param.name === 't').values[0];
-            const wind = smhiData.timeSeries[0].parameters.find(param => param.name === 'ws').values[0];
-            const gust = smhiData.timeSeries[0].parameters.find(param => param.name === 'gust').values[0];
+            try {
+                const smhiData = JSON.parse(smhiRequest.responseText);
 
-            const rapidRequest = new XMLHttpRequest();
-            rapidRequest.open('GET', rapidApiUrl, true);
-            rapidRequest.onload = function() {
-                if (rapidRequest.status >= 200 && rapidRequest.status < 400) {
-                    const rapidApiData = JSON.parse(rapidRequest.responseText);
-                    const topSnowDepth = rapidApiData.topSnowDepth ?? 'saknas information just nu.';
-                    const botSnowDepth = rapidApiData.botSnowDepth ?? 'saknas information just nu.';
-                    const freshSnowfall = rapidApiData.freshSnowfall ?? 'saknas information just nu.';
-                    const lastSnowfallDate = rapidApiData.lastSnowfallDate ?? 'saknas information just nu.';
+                const temperature = smhiData.timeSeries[0].parameters.find(param => param.name === 't').values[0];
+                const wind = smhiData.timeSeries[0].parameters.find(param => param.name === 'ws').values[0];
+                const gust = smhiData.timeSeries[0].parameters.find(param => param.name === 'gust').values[0];
 
-                    const popupContent = `
-                        <b>${resortName}</b><br>
-                        Temperatur: ${temperature}°C<br>
-                        Vind: ${wind} (${gust}) m/s (byvind)<br>
-                        Snödjup topp: ${topSnowDepth}<br>
-                        Snödjup botten: ${botSnowDepth}<br>
-                        Nysnö: ${freshSnowfall}<br>
-                        Senaste snöfall: ${lastSnowfallDate}
-                    `;
-                    marker.getPopup().setContent(popupContent).update();
-                } else {
-                    marker.getPopup().setContent(`<b>${resortName}</b><br>Kunde inte hämta data från RapidAPI.`).update();
+                const rapidApiUrl = `https://ski-resort-forecast.p.rapidapi.com/${resortName.toLowerCase()}/snowConditions?units=m`;
+                const rapidApiOptions = {
+                    'x-rapidapi-key': '5c48411b97msh43df63e7cfa00d6p11922bjsnaa3ea7a3a7f8',
+                    'x-rapidapi-host': 'ski-resort-forecast.p.rapidapi.com'
+                };
+
+                const rapidRequest = new XMLHttpRequest();
+                rapidRequest.open('GET', rapidApiUrl, true);
+                for (const key in rapidApiOptions) {
+                    rapidRequest.setRequestHeader(key, rapidApiOptions[key]);
                 }
-            };
-            rapidRequest.onerror = function() {
-                marker.getPopup().setContent(`<b>${resortName}</b><br>Kunde inte hämta data från RapidAPI.`).update();
-            };
-            rapidRequest.send();
+                rapidRequest.onload = function() {
+                    
+                    if (rapidRequest.status >= 200 && rapidRequest.status < 400) {
+                        try {
+                            const rapidApiData = JSON.parse(rapidRequest.responseText);
+
+                            const topSnowDepth = rapidApiData.topSnowDepth ?? 'saknas information just nu.';
+                            const botSnowDepth = rapidApiData.botSnowDepth ?? 'saknas information just nu.';
+                            const freshSnowfall = rapidApiData.freshSnowfall ?? 'saknas information just nu.';
+                            const lastSnowfallDate = rapidApiData.lastSnowfallDate ?? 'saknas information just nu.';
+
+                            const popupContent = `
+                                <b>${resortName}</b><br>
+                                Temperatur: ${temperature}°C<br>
+                                Vind: ${wind} (${gust}) m/s (byvind)<br>
+                                Snödjup topp: ${topSnowDepth}<br>
+                                Snödjup botten: ${botSnowDepth}<br>
+                                Nysnö: ${freshSnowfall}<br>
+                                Senaste snöfall: ${lastSnowfallDate}
+                            `;
+                            marker.getPopup().setContent(popupContent).update();
+                        } catch (error) {
+                            console.error('Error parsing RapidAPI data:', error);
+                            marker.getPopup().setContent(`<b>${resortName}</b><br>Kunde inte hämta data från RapidAPI.`).update();
+                        }
+                    } else {
+                        marker.getPopup().setContent(`<b>${resortName}</b><br>Kunde inte hämta data från RapidAPI.`).update();
+                    }
+                };
+                rapidRequest.onerror = function() {
+                    marker.getPopup().setContent(`<b>${resortName}</b><br>Kunde inte hämta data från RapidAPI.`).update();
+                };
+                rapidRequest.send();
+            } catch (error) {
+                console.error('Error parsing SMHI data:', error);
+                marker.getPopup().setContent(`<b>${resortName}</b><br>Kunde inte hämta data från SMHI.`).update();
+            }
         } else {
             marker.getPopup().setContent(`<b>${resortName}</b><br>Kunde inte hämta data från SMHI.`).update();
         }
@@ -140,4 +165,3 @@ function showWeather(resortName, lat, lon, marker) {
 
 // Visa skidorter vid start
 showSkiResorts();
-
